@@ -1,6 +1,7 @@
 package com.bcc.canteen.entity;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "users")
@@ -12,11 +13,11 @@ public class User {
 
     private String name;
     private String email;
+    @JsonIgnore
     private String password;
 
     @Enumerated(EnumType.STRING)
     private Role role;
-
     public Long getId() {
         return id;
     }
