@@ -2,7 +2,6 @@ package com.bcc.canteen.service;
 
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
-
 import com.bcc.canteen.entity.*;
 import com.bcc.canteen.repository.*;
 
@@ -48,6 +47,24 @@ public class FeedbackService {
         return feedbackRepo.save(feedback);
     }
 
+    public void deleteFeedbackByOwner(Long feedbackId, Long ownerId) {
+        Feedback feedback = feedbackRepo.findById(feedbackId)
+                .orElseThrow(() -> new RuntimeException("Feedback not found"));
+
+        Order order = feedback.getOrder();
+
+        if (order.getCanteen() == null || order.getCanteen().getOwner() == null) {
+            throw new RuntimeException("Canteen owner not found");
+        }
+
+        Long canteenOwnerId = order.getCanteen().getOwner().getId();
+
+        if (!canteenOwnerId.equals(ownerId)) {
+            throw new RuntimeException("You can only delete feedback for your own canteen");
+        }
+
+        feedbackRepo.delete(feedback);
+    }
 
     public void deleteFeedback(Long id) {
         feedbackRepo.deleteById(id);
