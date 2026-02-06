@@ -1,170 +1,1433 @@
-# BCC Canteen
+# BCC Canteen API Documentation
 
-### ⚠️⚠️⚠️
+## Overview
+BCC Canteen is a digital platform to manage campus canteens: ordering food, payments, menu management, and admin control.
 
+**Base URL:**
+http://localhost:8080/api
+
+
+---
+
+## Authentication
+- **Type:** JWT (Bearer Token)
+- **How to get token:** Use `/users/login` endpoint
+- **Header Example:**
+
+
+---
+
+## Endpoints
+
+### 1. Register User
+**POST** `/users/register`
+
+**Request Body**
+```json
+{
+  "username": "salmakamila",
+  "password": "123",
+  "email": "salma@example.com"
+}
+
+**Responses**
+
+{
+  "id": 1,
+  "username": "salmakamila",
+  "email": "salma@example.com",
+  "role": "USER"
+}
+
+### 1.2 Register User
+**POST** `/auth/login`
+
+**Request Body**
+```json
+{
+  "username": "salmakamila",
+  "password": "123"
+}
+
+
+**Responses**
+
+{
+  "token": "<JWT_TOKEN>"
+}
+
+### 1.3 Update Profile
+//**PUT** `/auth/profile/{userId}`
+
+**Request Body**
+```json
+{
+  "username": "newname",
+  "email": "newemail@example.com"
+}
+
+
+**Responses**
+
+{
+  "id": 1,
+  "username": "newname",
+  "email": "newemail@example.com"
+}
+
+### 1.4 Update Role to Owner
+//PUT /auth/admin/owner/{ownerId}
+
+**Request Body**
+```json
+{
+  "role": "OWNER"
+}
+
+
+**Responses**
+{
+  "id": 1,
+  "username": "owner",
+  "role": "OWNER"
+}
+
+//User Controller
+
+###2.1 Get Logged-in User Info
+//GET /users/me
+
+**Request Body**
+```json
+{
+  "role": "OWNER"
+}
+
+
+**Responses**
+{
+  "id": 1,
+  "username": "owner",
+  "role": "OWNER"
+}
+
+//Canteen Controller
+###3.1 Get All Canteens
+//GET /canteens
+
+**Request Body**
+```json
+
+
+**Responses**
+[
+  { "id": 1, "name": "Canteen A" },
+  { "id": 2, "name": "Canteen B" }
+]
+
+###3.2 Create Canteen
+POST /canteens
+
+**Request Body**
+```json
+{
+  "name": "Canteen B"
+}
+
+
+**Responses**
+{
+  "id": 2,
+  "name": "Canteen B"
+}
+
+###3.3 Get Canteen by ID
+//GET /canteens/{id}
+
+**Request Body**
+```json
+
+
+**Responses**
+{
+  "id": 1,
+  "name": "Canteen A"
+}
+
+###3.4 Update Canteen
+//PUT /canteens/{id}
+
+**Request Body**
 ```
-Submissions from 2025 students will have much higher priority than submissions from 2024, SAP, or higher students.
-Please take note of this before planning to attempt this freepass challenge.
+{
+  "name": "Canteen Updated"
+}
+
+**Responses**
+{
+  "id": 1,
+  "name": "Canteen Updated"
+}
+
+//Menu Controller
+
+###4.2 Create Menu
+//POST /menus
+
+**Request Body**
+```
+{
+  "name": "Mie Goreng",
+  "price": 15000,
+  "canteenId": 1
+}
+
+
+**Responses**
+{
+  "id": 2,
+  "name": "Mie Goreng",
+  "price": 15000
+}
+
+###4.3 Get Menu by ID
+//POST /menus
+
+**Request Body**
 ```
 
-## 💌 Invitation Letter
+**Responses**
 
-As campus life continues to evolve, the need for a fast, transparent, and efficient canteen service becomes increasingly important. We recognize that both customers and canteen operators require a system that simplifies food ordering, payment processing, menu management, and administrative control.
+{
+  "id": 1,
+  "name": "Nasi Goreng",
+  "price": 20000
+}
 
-To address this need, we introduce BCC Canteen, a digital platform designed to transform how campus canteens operate. This system aims to provide a seamless food ordering and payment experience for users, efficient menu and order management for canteen owners, and centralized supervision for administrators.
+###4.4 Update Menu
+//PUT /menus/{id}
 
-## **⭐** Minimum Viable Product (MVP)
-
-As the initial development phase of BCC Canteen, the system must support the following minimum features:
-- New users can register an account ✔️
-- Users can log in to the system ✔️
-- Users can edit their profile information ✔️
-- Users can view available canteens and food menus ✔️
-- Users can place food orders (only if stock is available) ✔️
-- Users can make payments for their orders ✔️
-- Users can view order status of their orders ✔️
-- Users can leave feedback or reviews for completed orders ✔️
-- Canteen owners can create, update, and delete food menus including stock ✔️
-- Canteen owners can view incoming orders ✔️
-- Canteen owners can view payment status of orders (e.g., Unpaid, Paid) ✔️
-- Canteen owners can update order status (e.g., Waiting, Cooking, Ready, Completed) ✔️
-- Canteen owners can remove inappropriate user feedback ✔️
-- Admin can add new canteen owner accounts ✔️
-- Admin can edit canteen owner accounts ✔️
-- Admin can remove user or canteen owner accounts ✔️
-
-## **🌎** Service Implementation
-
+**Request Body**
 ```
-GIVEN => I am a new user
-WHEN  => I register in the system
-THEN  => The system will store and return my registration details
+{
+  "name": "Nasi Goreng Spesial",
+  "price": 22000
+}
 
-GIVEN => I am a user
-WHEN  => I log in to the system
-THEN  => The system will authenticate and grant access based on my credentials
+**Responses**
+{
+  "id": 1,
+  "name": "Nasi Goreng Spesial",
+  "price": 22000
+}
 
-GIVEN => I am a user
-WHEN  => I edit my profile
-THEN  => The system will update my profile information
+###4.5 Delete Menu
+//DELETE /menus/{id}
 
-GIVEN => I am a user
-WHEN  => I view available canteens and menus
-THEN  => The system will display all canteens and their menu details
-
-GIVEN => I am a user
-WHEN  => I place a food order
-THEN  => The system will check stock availability, decrease the stock, and record the order with "Unpaid" status
-
-GIVEN => I am a user
-WHEN  => I make a payment for my order
-THEN  => The system will verify the payment and update payment status to "Paid"
-
-GIVEN => I am a user
-WHEN  => I view my order details
-THEN  => The system will display order information including payment status (e.g., Paid) and order status (e.g., Cooking)
-
-GIVEN => I am a user
-WHEN  => I leave feedback for a completed order
-THEN  => The system will save and display my feedback
-
-GIVEN => I am a canteen owner
-WHEN  => I create a new menu item
-THEN  => The system will store and publish the menu item
-
-GIVEN => I am a canteen owner
-WHEN  => I update a menu item
-THEN  => The system will apply and confirm the changes
-
-GIVEN => I am a canteen owner
-WHEN  => I delete a menu item
-THEN  => The system will remove the menu item from the system
-
-GIVEN => I am a canteen owner
-WHEN  => I view incoming orders
-THEN  => The system will display all orders related to my canteen
-
-GIVEN => I am a canteen owner
-WHEN  => I view order payment status
-THEN  => The system will display the payment status of each order
-
-GIVEN => I am a canteen owner
-WHEN  => I update the order status (e.g., set to "Cooking")
-THEN  => The system will update the status only if the order has been paid
-
-GIVEN => I am a canteen owner
-WHEN  => I remove user feedback
-THEN  => The system will delete the feedback from the system
-
-GIVEN => I am an admin
-WHEN  => I add a new canteen owner
-THEN  => The system will create a canteen owner account
-
-GIVEN => I am an admin
-WHEN  => I edit canteen owner accounts
-THEN  => The system will update canteen owner account
-
-GIVEN => I am an admin
-WHEN  => I remove a user or canteen owner
-THEN  => The system will delete the account from the system
+**Request Body**
 ```
 
-## **👪** Entities and Actors
+**Responses**
+200 OK
 
-We want to see your perspective about these problems. You can define various types of entities or actors. One thing for sure, there is no true or false statement to define the entities. As long as the results are understandable, then go for it! 🚀
-
-## **📘** References
-
-You might be overwhelmed by these requirements. Don't worry, here's a list of some tools that you could use (it's not required to use all of them nor any of them):
-
-1. [Example Project](https://github.com/meong1234/fintech)
-2. [Git](https://try.github.io/)
-3. [Cheatsheets](https://devhints.io/)
-4. [REST API](https://restfulapi.net/)
-5. [Insomnia REST Client](https://insomnia.rest/)
-6. [Test-Driven Development](https://www.freecodecamp.org/news/test-driven-development-what-it-is-and-what-it-is-not-41fa6bca02a2/)
-7. [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
-8. [GraphQL](https://graphql.org/)
-9. [gRPC](https://grpc.io/)
-10. [Docker Compose](https://docs.docker.com/compose/install/)
-
-## **🔪** Accepted Weapons
-
-> BEFORE CHOOSING YOUR LANGUAGE, PLEASE VISIT OUR [CONVENTION](CONVENTION.md) ON THIS PROJECT
->
-> **Any code that did not follow the convention will be rejected!**
->
-> 1. Golang (preferred)
-> 2. NodeJS
-> 3. PHP
-> 4. Java
-
-You are welcome to use any libraries or frameworks, but we appreciate it if you use the popular ones. 
-
-## **🎒** Tasks
-
+//Order Controller
+###5.1 Create Order
+//POST /orders
+**Request Body**
 ```
-The implementation of this project MUST be in the form of a REST, gRPC, or GraphQL API (choose AT LEAST one type).
+{
+  "userId": 1,
+  "items": [
+    { "menuId": 1, "quantity": 2 }
+  ]
+}
+
+
+**Responses**
+{
+  "orderId": 1,
+  "status": "PENDING"
+}
+
+
+###5.2 Update Order Status
+PUT /orders/status/{orderId}
+**Request Body**
+```
+{
+  "status": "PAID"
+}
+
+
+**Responses**
+{
+  "orderId": 1,
+  "status": "PAID"
+}
+
+###5.3 Get Orders by User
+GET /orders/user/{userId}
+**Request Body**
 ```
 
-1. Fork this repository
-2. Follow the project convention
-3. Finish all service implementations
-4. Write the installation guide of your back-end service in the section below
+**Responses**
+[
+  { "orderId": 1, "status": "PAID" }
+]
 
-## **🧪** API Installation
+###5.4 Get Orders by Canteen
+GET /orders/canteen/{canteenId}
+**Request Body**
+```
 
-> Write how to run your service in a local or development environment here. If you use Docker to serve your DBMS or your server, you will receive bonus points for your submission.
+**Responses**
+[
+  { "orderId": 1, "status": "PENDING" }
+]
 
-## **📞** Contact
+//Payment Controller
+###6.1 Pay Order
+POST /payments/pay/{orderId}
+**Request Body**
+```
 
-Have any questions? You can contact [Atha](https://www.instagram.com/mhqif/).
-## **🎁** Submission
+**Responses**
+{
+  "paymentId": 1,
+  "status": "PAID"
+}
 
-Please follow the instructions on the [Contributing guide](CONTRIBUTING.md).
 
-![cheers](https:
-> This is not the only way to join us.
->
-> **But, this is the _one and only way_ to instantly pass.**
+/Feedback Controller
+###7.1 Create Feedback
+POST /feedbacks/{orderId}
+**Request Body**
+```
+{
+  "rating": 5,
+  "comment": "Mantap"
+}
+
+**Responses**
+{
+  "id": 1,
+  "rating": 5,
+  "comment": "Mantap"
+}
+
+###7.2 Delete Feedback
+DELETE /feedbacks/{id}
+**Request Body**
+```
+
+
+**Responses**
+200 OK
+
+
+
+
+
+//swagger: http://localhost:8080/swagger-ui/index.html#/order-controller
+///v3/api-docs
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "OpenAPI definition",
+    "version": "v0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Generated server url"
+    }
+  ],
+  "paths": {
+    "/orders/status/{orderId}": {
+      "put": {
+        "tags": [
+          "order-controller"
+        ],
+        "operationId": "updateOrderStatus",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "PENDING",
+                "COOKING",
+                "READY",
+                "COMPLETED",
+                "CANCELLED"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Order"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/menus/{id}": {
+      "get": {
+        "tags": [
+          "menu-controller"
+        ],
+        "operationId": "getMenuById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Menu"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "menu-controller"
+        ],
+        "operationId": "updateMenu",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Menu"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Menu"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "menu-controller"
+        ],
+        "operationId": "deleteMenu",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/canteens/{id}": {
+      "get": {
+        "tags": [
+          "canteen-controller"
+        ],
+        "operationId": "getCanteenById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Canteen"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "canteen-controller"
+        ],
+        "operationId": "updateCanteen",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Canteen"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Canteen"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "canteen-controller"
+        ],
+        "operationId": "deleteCanteen",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/auth/profile/{userId}": {
+      "put": {
+        "tags": [
+          "auth-controller"
+        ],
+        "operationId": "updateProfile",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/admin/owner/{ownerId}": {
+      "put": {
+        "tags": [
+          "auth-controller"
+        ],
+        "operationId": "editOwner",
+        "parameters": [
+          {
+            "name": "ownerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payments/pay/{orderId}": {
+      "post": {
+        "tags": [
+          "payment-controller"
+        ],
+        "operationId": "payOrder",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Payment"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/orders": {
+      "post": {
+        "tags": [
+          "order-controller"
+        ],
+        "operationId": "createOrder",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOrderRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Order"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/menus": {
+      "get": {
+        "tags": [
+          "menu-controller"
+        ],
+        "operationId": "getAllMenus",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Menu"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "menu-controller"
+        ],
+        "operationId": "createMenu",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Menu"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Menu"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/feedbacks/{orderId}": {
+      "post": {
+        "tags": [
+          "feedback-controller"
+        ],
+        "operationId": "giveFeedback",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "rating",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "comment",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Feedback"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/canteens": {
+      "get": {
+        "tags": [
+          "canteen-controller"
+        ],
+        "operationId": "getAllCanteens",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Canteen"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "canteen-controller"
+        ],
+        "operationId": "createCanteen",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Canteen"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Canteen"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "tags": [
+          "auth-controller"
+        ],
+        "operationId": "register",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "auth-controller"
+        ],
+        "operationId": "login",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/admin/owner": {
+      "get": {
+        "tags": [
+          "auth-controller"
+        ],
+        "operationId": "adminOwnerEndpoint",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "auth-controller"
+        ],
+        "operationId": "addOwner",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/me": {
+      "get": {
+        "tags": [
+          "user-controller"
+        ],
+        "operationId": "me",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/orders/user/{userId}": {
+      "get": {
+        "tags": [
+          "order-controller"
+        ],
+        "operationId": "getOrdersByUser",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Order"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/orders/canteen/{canteenId}": {
+      "get": {
+        "tags": [
+          "order-controller"
+        ],
+        "operationId": "getOrdersByCanteen",
+        "parameters": [
+          {
+            "name": "canteenId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Order"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/owner": {
+      "get": {
+        "tags": [
+          "auth-controller"
+        ],
+        "operationId": "ownerOnly",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/admin": {
+      "get": {
+        "tags": [
+          "auth-controller"
+        ],
+        "operationId": "adminOnly",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/feedbacks/{id}": {
+      "delete": {
+        "tags": [
+          "feedback-controller"
+        ],
+        "operationId": "deleteFeedback",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Canteen": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "owner": {
+            "$ref": "#/components/schemas/User"
+          },
+          "menus": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Menu"
+            }
+          }
+        }
+      },
+      "Feedback": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "rating": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "comment": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "order": {
+            "$ref": "#/components/schemas/Order"
+          }
+        }
+      },
+      "GrantedAuthority": {
+        "type": "object",
+        "properties": {
+          "authority": {
+            "type": "string"
+          }
+        }
+      },
+      "Menu": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number",
+            "format": "double"
+          },
+          "stock": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "canteen": {
+            "$ref": "#/components/schemas/Canteen"
+          }
+        }
+      },
+      "Order": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          },
+          "totalPrice": {
+            "type": "number",
+            "format": "double"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "COOKING",
+              "READY",
+              "COMPLETED",
+              "CANCELLED"
+            ]
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrderItem"
+            }
+          },
+          "canteen": {
+            "$ref": "#/components/schemas/Canteen"
+          },
+          "payment": {
+            "$ref": "#/components/schemas/Payment"
+          },
+          "feedback": {
+            "$ref": "#/components/schemas/Feedback"
+          }
+        }
+      },
+      "OrderItem": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "order": {
+            "$ref": "#/components/schemas/Order"
+          },
+          "menu": {
+            "$ref": "#/components/schemas/Menu"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "price": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "Payment": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "paymentTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "UNPAID",
+              "PAID"
+            ]
+          },
+          "order": {
+            "$ref": "#/components/schemas/Order"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "USER",
+              "OWNER",
+              "ADMIN"
+            ]
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "accountNonLocked": {
+            "type": "boolean"
+          },
+          "authorities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GrantedAuthority"
+            }
+          },
+          "credentialsNonExpired": {
+            "type": "boolean"
+          },
+          "accountNonExpired": {
+            "type": "boolean"
+          }
+        }
+      },
+      "UserResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          }
+        }
+      },
+      "CreateOrderRequest": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "canteenId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrderItemRequest"
+            }
+          }
+        }
+      },
+      "OrderItemRequest": {
+        "type": "object",
+        "properties": {
+          "menuId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "LoginRequest": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "AuthResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
 
