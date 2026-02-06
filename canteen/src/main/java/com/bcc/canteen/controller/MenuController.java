@@ -3,7 +3,6 @@ package com.bcc.canteen.controller;
 import com.bcc.canteen.entity.Menu;
 import com.bcc.canteen.repository.MenuRepository;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -21,17 +20,14 @@ public class MenuController {
     public List<Menu> getAllMenus() {
         return menuRepository.findAll();
     }
-
     @GetMapping("/{id}")
     public Optional<Menu> getMenuById(@PathVariable Long id) {
         return menuRepository.findById(id);
     }
-
     @PostMapping
     public Menu createMenu(@RequestBody Menu menu) {
         return menuRepository.save(menu);
     }
-
     @PutMapping("/{id}")
     public Menu updateMenu(@PathVariable Long id, @RequestBody Menu menuDetails) {
         Menu menu = menuRepository.findById(id)
@@ -44,7 +40,6 @@ public class MenuController {
 
         return menuRepository.save(menu);
     }
-
     @DeleteMapping("/{id}")
     public void deleteMenu(@PathVariable Long id) {
         menuRepository.deleteById(id);

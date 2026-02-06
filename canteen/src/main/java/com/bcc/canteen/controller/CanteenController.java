@@ -24,20 +24,15 @@ public class CanteenController {
         this.orderRepository = orderRepository;
     }
 
-    // GET all canteens
     @GetMapping
     public List<Canteen> getAllCanteens() {
         return canteenRepository.findAll();
     }
-
-    // GET canteen by id
     @GetMapping("/{id}")
     public Canteen getCanteenById(@PathVariable Long id) {
         return canteenRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Canteen not found"));
     }
-
-    // POST create new canteen
     @PostMapping
     public Canteen createCanteen(@RequestBody Canteen canteen) {
         if (canteen.getOwner() != null && canteen.getOwner().getId() != null) {
@@ -49,8 +44,6 @@ public class CanteenController {
         }
         return canteenRepository.save(canteen);
     }
-
-    // PUT update canteen
     @PutMapping("/{id}")
     public Canteen updateCanteen(@PathVariable Long id, @RequestBody Canteen canteenDetails) {
         Canteen canteen = canteenRepository.findById(id)
@@ -66,7 +59,6 @@ public class CanteenController {
 
         return canteenRepository.save(canteen);
     }
-
     @DeleteMapping("/{id}")
     public void deleteCanteen(@PathVariable Long id) {
         Canteen canteen = canteenRepository.findById(id)
@@ -82,3 +74,4 @@ public class CanteenController {
     }
 
 }
+

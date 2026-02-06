@@ -19,24 +19,24 @@ public class PaymentController {
         this.orderRepository = orderRepository;
     }
 
-    //Make payment for an order
     @PostMapping("/pay/{orderId}")
     public Payment payOrder(@PathVariable Long orderId) {
 
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
 
-        if (order.getPayment() != null && order.getPayment().getStatus() == PaymentStatus.PAID) {
+        Payment payment = order.getPayment();
+
+        if (payment == null) {
+            throw new RuntimeException("Payment not found for this order");
+        }
+
+        if (payment.getStatus() == PaymentStatus.PAID) {
             throw new RuntimeException("Order already paid");
         }
 
-        Payment payment = new Payment();
-        payment.setOrder(order);
-        payment.setAmount(order.getTotalPrice());
         payment.setPaymentTime(LocalDateTime.now());
         payment.setStatus(PaymentStatus.PAID);
-
-        order.setPayment(payment);
 
         return paymentRepository.save(payment);
     }

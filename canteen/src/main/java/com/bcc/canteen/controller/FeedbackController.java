@@ -21,7 +21,6 @@ public class FeedbackController {
                                  @RequestParam String comment) {
         return feedbackService.giveFeedback(orderId, userId, rating, comment);
     }
-
     @DeleteMapping("/{id}")
     public void deleteFeedback(@PathVariable Long id) {
         feedbackService.deleteFeedback(id);

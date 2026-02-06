@@ -1,7 +1,12 @@
 package com.bcc.canteen.controller;
 
-import com.bcc.canteen.entity.*;
-import com.bcc.canteen.repository.*;
+import com.bcc.canteen.dto.CreateOrderRequest;
+import com.bcc.canteen.entity.Order;
+import com.bcc.canteen.entity.OrderStatus;
+import com.bcc.canteen.entity.User;
+import com.bcc.canteen.service.OrderService;
+import com.bcc.canteen.util.AuthUtil;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,25 +15,35 @@ import java.util.List;
 @RequestMapping("/orders")
 public class OrderController {
 
-    private final OrderRepository orderRepository;
+    private final OrderService orderService;
 
-    public OrderController(OrderRepository orderRepository) {
-        this.orderRepository = orderRepository;
+    public OrderController(OrderService orderService) {
+        this.orderService = orderService;
     }
 
-    @GetMapping
-    public List<Order> getAllOrders() {
-        return orderRepository.findAll();
+    @GetMapping("/user/{userId}")
+    public List<Order> getOrdersByUser(@PathVariable Long userId,
+                                       @AuthenticationPrincipal User currentUser) {
+        AuthUtil.checkUser(currentUser);
+        return orderService.getOrdersByUser(userId);
     }
-
+    @GetMapping("/canteen/{canteenId}")
+    public List<Order> getOrdersByCanteen(@PathVariable Long canteenId,
+                                          @AuthenticationPrincipal User currentUser) {
+        AuthUtil.checkOwner(currentUser);
+        return orderService.getOrdersByCanteen(canteenId);
+    }
     @PostMapping
-    public Order createOrder(@RequestBody Order order) {
-
-        if (order.getItems() != null) {
-            order.getItems().forEach(item -> item.setOrder(order));
-        }
-
-        return orderRepository.save(order);
+    public Order createOrder(@RequestBody CreateOrderRequest request,
+                             @AuthenticationPrincipal User currentUser) {
+        AuthUtil.checkUser(currentUser);
+        return orderService.createOrder(request);
     }
-
+    @PutMapping("/status/{orderId}")
+    public Order updateOrderStatus(@PathVariable Long orderId,
+                                   @RequestParam OrderStatus status,
+                                   @AuthenticationPrincipal User currentUser) {
+        AuthUtil.checkOwner(currentUser);
+        return orderService.updateOrderStatus(orderId, status);
+    }
 }
