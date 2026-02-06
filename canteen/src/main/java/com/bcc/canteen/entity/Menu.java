@@ -10,6 +10,7 @@ public class Menu {
     private Long id;
 
     private String name;
+
     private Double price;
 
     @Column(nullable = false)

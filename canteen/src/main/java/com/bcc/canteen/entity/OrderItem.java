@@ -15,7 +15,6 @@ public class OrderItem {
     @JsonBackReference
     private Order order;
 
-
     @ManyToOne
     @JoinColumn(name = "menu_id")
     private Menu menu;

@@ -21,7 +21,7 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<OrderItem> items;
 
@@ -29,7 +29,7 @@ public class Order {
     @JoinColumn(name = "canteen_id")
     private Canteen canteen;
 
-    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference(value = "order-payment")
     private Payment payment;
 
@@ -83,7 +83,6 @@ public class Order {
     public void setPayment(Payment payment) {
         this.payment = payment;
     }
-
 
     public Feedback getFeedback() {
         return feedback;

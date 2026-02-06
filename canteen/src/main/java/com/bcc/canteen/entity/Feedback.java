@@ -21,26 +21,43 @@ public class Feedback {
     @JoinColumn(name = "order_id", unique = true)
     private Order order;
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public int getRating() {
-        return rating; }
+        return rating;
+    }
+
     public void setRating(int rating) {
-        this.rating = rating; }
+        this.rating = rating;
+    }
 
     public String getComment() {
-        return comment; }
+        return comment;
+    }
+
     public void setComment(String comment) {
-        this.comment = comment; }
+        this.comment = comment;
+    }
 
     public LocalDateTime getCreatedAt() {
-        return createdAt; }
+        return createdAt;
+    }
+
     public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt; }
+        this.createdAt = createdAt;
+    }
 
     public Order getOrder() {
-        return order; }
+        return order;
+    }
+
     public void setOrder(Order order) {
-        this.order = order; }
+        this.order = order;
+    }
 }

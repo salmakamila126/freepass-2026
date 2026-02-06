@@ -9,10 +9,14 @@
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long id;
+
         private String name;
+
         @ManyToOne
+        @JoinColumn(name = "owner_id")
         private User owner;
-        @OneToMany(mappedBy = "canteen", cascade = CascadeType.ALL, orphanRemoval = true)
+
+        @OneToMany (mappedBy = "canteen", cascade = CascadeType.ALL, orphanRemoval = true)
         @JsonBackReference
         private List<Menu> menus;
 

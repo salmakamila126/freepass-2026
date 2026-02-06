@@ -18,7 +18,6 @@ public class Payment {
     @Enumerated(EnumType.STRING)
     private PaymentStatus status; //UNPAID, PAID
 
-
     @JsonBackReference(value = "order-payment")
     @OneToOne
     @JoinColumn(name = "order_id")
